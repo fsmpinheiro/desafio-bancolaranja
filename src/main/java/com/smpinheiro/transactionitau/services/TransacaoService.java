@@ -33,25 +33,30 @@ public class TransacaoService {
 			throw new UnprocessableEntity("Valor não pode ser menor que R$0");
 		}
 		
+		log.info("Trasações adicionadas com sucesso");
 		listOfTransacoes.add(dto);
 	}
 	
 	public void clearAllTransacoes() {
 		
+		log.info("Iniciando limpeza completa nas trasações");
 		if(listOfTransacoes.isEmpty()) {
-			log.error("Não há transações, não o que limpar");
+			log.error("Erro, não há transações, não o que limpar");
 			throw new UnprocessableEntity("Não há transações a eliminar");
 		}
 		
+		log.info("Transações deletadas com sucesso");
 		listOfTransacoes.clear();
 	}
 	
 	public List<TransacaoRequestDTO> getReportTransacoes(Integer intervalo) {
 		
+		log.info("Iniciadas buscas por trasações para " + intervalo + " segundos");
 		OffsetDateTime intervaloOffset = OffsetDateTime.now().minusSeconds(intervalo);
 		
 		List<TransacaoRequestDTO> listReturn = listOfTransacoes.stream()
 					.filter(trs -> trs.dataHora().isAfter(intervaloOffset)).toList() ;
+		log.info(listReturn.size() + " transações encontradas - retornando transações");
 		
 		return listReturn;
 	}
